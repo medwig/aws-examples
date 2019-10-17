@@ -1,0 +1,18 @@
+service: tmp
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: us-east-2
+
+  vpc:
+    securityGroupIds:
+      - ${ssm:/vpc/security_group/default}
+    subnetIds:
+      "Fn::Split":
+        - ','
+        - ${ssm:/vpc/subnets/private}
+
+functions:
+  get_ip:
+    handler: handler.get_ip
